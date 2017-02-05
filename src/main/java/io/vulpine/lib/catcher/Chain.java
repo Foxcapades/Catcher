@@ -110,7 +110,7 @@ public final class Chain < T >
    *
    * @param supplier Exception supplier
    *
-   * @param < R > Capture type of the expected thrown Exception
+   * @param <R> Capture type of the expected thrown Exception
    *
    * @return current value if present.
    *
