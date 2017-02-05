@@ -1,0 +1,18 @@
+language: java
+sudo: false
+
+jdk:
+- oraclejdk8
+
+before_install:
+- chmod +x gradlew
+- echo 'ext.OSSRH_USERNAME="lol"' >> config.gradle
+- echo 'ext.OSSRH_PASSWORD="no"' >> config.gradle
+
+install: true
+
+script:
+- ./gradlew classes testClasses test jacocoTestReport
+
+after_success:
+- bash <(curl -s https://codecov.io/bash)
