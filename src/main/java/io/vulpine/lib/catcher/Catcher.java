@@ -1,6 +1,7 @@
 package io.vulpine.lib.catcher;
 
 import io.vulpine.lib.jcfi.CheckedSupplier;
+import io.vulpine.lib.jcfi.CheckedRunnable;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -19,6 +20,9 @@ public final class Catcher
    * @param <R> Return type of the given Supplier
    *
    * @return Either the result of the supplier or the fallback function.
+   *
+   * @throws NullPointerException if the fallback parameter is null whether it
+   *                              is used or not.
    */
   public static < R > R call(
     CheckedSupplier < R > func,
@@ -50,6 +54,9 @@ public final class Catcher
    *
    * @return Either the result of the {@link CheckedSupplier} or the fallback
    *         {@link Supplier}.
+   *
+   * @throws NullPointerException if the handler or fallback parameter are null
+   *         whether it is used or not.
    */
   public static < R > R call(
     CheckedSupplier < R > supplier,
@@ -67,6 +74,31 @@ public final class Catcher
     }
   }
 
+  /**
+   * Execute checked.
+   *
+   * Runs the given action, if an exception is thrown it is passed to the given
+   * handler.
+   *
+   * @param action  Checked Action
+   * @param handler Exception Handler
+   *
+   * @throws NullPointerException if the given handler is null.  Will throw
+   *         regardless of whether or not the handler is used.
+   */
+  public static void call(
+    CheckedRunnable action,
+    Consumer < Exception > handler
+  )
+  {
+    Objects.requireNonNull(handler);
+
+    try {
+      action.run();
+    } catch ( Exception e ) {
+      handler.accept(e);
+    }
+  }
 
   /**
    * Creates a result chain with the given {@link CheckedSupplier} as the start.
